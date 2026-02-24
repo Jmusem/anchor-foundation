@@ -15,6 +15,109 @@ section {
   padding: 100px 0;
 }
 
+
+/* Vertical Line - works on all devices */
+.vertical-line {
+  background: linear-gradient(to bottom, #00f5ff, #ff00ff);
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+/* Desktop: vertical between image & text */
+@media (min-width: 992px) {
+  .vertical-line {
+    width: 2px;
+    height: 100%;
+    margin: 0 2rem;
+  }
+}
+
+/* Mobile: horizontal separator between stacked image & text */
+@media (max-width: 991px) {
+  .vertical-line {
+    width: 80%;
+    height: 2px;
+    margin: 1rem 0;
+    background: linear-gradient(to right, #00f5ff, #ff00ff);
+  }
+}
+
+/* Optional: program-row spacing */
+.program-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+/* Glass Navbar */
+.navbar {
+  background: rgba(10, 25, 49, 0.7);
+  backdrop-filter: blur(15px);
+  transition: all 0.4s ease;
+  padding: 15px 0;
+  z-index: 1000;
+}
+
+.navbar-scrolled {
+  background: rgba(5, 15, 30, 0.95);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+/* Logo Neon Glow */
+.neon-logo {
+  color: #ffffff !important;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  transition: 0.3s ease;
+}
+
+.neon-logo:hover {
+  color: #00f5ff !important;
+  text-shadow: 0 0 10px #00f5ff;
+}
+
+/* Animated Links */
+.nav-animated {
+  color: #ffffff !important;
+  position: relative;
+  margin: 0 12px;
+  transition: 0.3s ease;
+}
+
+.nav-animated::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background: #00f5ff;
+  transition: 0.4s ease;
+}
+
+.nav-animated:hover {
+  color: #00f5ff !important;
+}
+
+.nav-animated:hover::after {
+  width: 100%;
+}
+
+/* Neon Donate Button */
+.neon-btn {
+  background: transparent;
+  border: 2px solid #00f5ff;
+  color: #00f5ff;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 30px;
+  transition: 0.4s ease;
+}
+
+.neon-btn:hover {
+  background: #00f5ff;
+  color: #0a1931;
+  box-shadow: 0 0 20px #00f5ff;
+}
 .section-title {
   font-weight: 700;
   color: #0A1931;
