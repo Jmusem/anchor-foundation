@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import Loader from "./components/Preloader";
-import Programs from "./components/programs";
-import Contact from "./components/Contact";
+import Programs from "./components/Programs";
 import Donate from "./components/Donate";
- // make sure this exists
+import Contact from "./components/Contact";
+import Loader from "./components/Preloader";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -17,7 +15,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -32,14 +30,12 @@ function App() {
         <>
           <Navbar />
 
-          <Routes>
-            <Route path="/" element={<Hero />} />
-            <Route path="/hero" element={<Hero />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/programs" element={<Programs />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/donate" element={<Donate />} />
-          </Routes>
+          {/* IMPORTANT: Do NOT wrap components again */}
+          <Hero />
+          <About />
+          <Programs />
+          <Donate />
+          <Contact />
         </>
       )}
     </>

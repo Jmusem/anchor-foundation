@@ -1,0 +1,218 @@
+/* Container & section */
+.programs-section {
+  padding: 100px 20px;
+  background: linear-gradient(145deg, #f5f7fa, #e2e8f0);
+  font-family: 'Poppins', sans-serif;
+  color: #790b0b;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 50px;
+  background: linear-gradient(90deg, #1a416a, #207283);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Key Activities */
+.key-activities {
+  background: rgba(255,255,255,0.8);
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 60px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.key-activities h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.key-activities ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.key-activities ul li {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.bullet {
+  color: #26394d;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* Programs Grid */
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  margin-bottom: 80px;
+}
+
+.program-card {
+  background: #26394d;
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.program-image img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.program-content {
+  padding: 25px;
+}
+
+.program-content h4 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.program-content p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.btn-donate {
+  display: inline-block;
+  padding: 10px 25px;
+  background: #26394d;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn-donate:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,123,255,0.4);
+}
+
+/* Upcoming Events */
+.upcoming-events {
+  margin-top: 80px;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.event-card {
+  background: rgba(255,255,255,0.85);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  padding-bottom: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.event-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.event-card h4 {
+  font-size: 1.3rem;
+  margin: 15px 20px 10px 20px;
+}
+
+.event-card p {
+  margin: 0 20px 10px 20px;
+  font-size: 0.95rem;
+}
+
+.event-date {
+  margin: 0 20px;
+  font-weight: 600;
+  color: #007bff;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: -1;
+}
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0,123,255,0.6);
+}
+
+.lightbox-controls {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.program-image-wrapper {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.program-image-main {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.program-image-wrapper:hover .program-image-main {
+  transform: scale(1.05);
+}
+
+.view-more-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 123, 255, 0.85);
+  color: #fff;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px rgba(0,123,255,0.5);
+}
+.lightbox-controls button {
+  padding: 8px 20px;
+  background: #007bff;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.lightbox-controls button:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}

@@ -1,101 +1,95 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function Hero() {
-  const text = "This is Anchor Foundation";
+  const fullText = "This is Anchor Foundation";
+
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [index, setIndex] = useState(0);
 
-  const words = ["Mindset", "Equipping", "Empower"];
+  const words = ["Mindset.", "Equipping.", "Empowerment."];
   const [activeWord, setActiveWord] = useState(0);
 
-  // Typing + Deleting Loop
+  /* Typing + Deleting Loop */
   useEffect(() => {
-    const speed = isDeleting ? 50 : 80;
+    const typingSpeed = isDeleting ? 40 : 70;
 
-    const timer = setTimeout(() => {
+    const timeout = setTimeout(() => {
       if (!isDeleting) {
-        setDisplayText(text.substring(0, index + 1));
+        setDisplayText(fullText.substring(0, index + 1));
         setIndex(index + 1);
 
-        if (index + 1 === text.length) {
+        if (index + 1 === fullText.length) {
           setTimeout(() => setIsDeleting(true), 1500);
         }
       } else {
-        setDisplayText(text.substring(0, index - 1));
+        setDisplayText(fullText.substring(0, index - 1));
         setIndex(index - 1);
 
         if (index - 1 === 0) {
           setIsDeleting(false);
         }
       }
-    }, speed);
+    }, typingSpeed);
 
-    return () => clearTimeout(timer);
-  }, [index, isDeleting, text]);
+    return () => clearTimeout(timeout);
+  }, [index, isDeleting]);
 
-  // Rotating Words
+  /* Rotating Word */
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveWord((prev) => (prev + 1) % words.length);
     }, 2500);
-
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="hero-section d-flex align-items-center text-center text-white">
-      <div className="container position-relative">
+    <section id="hero" className="hero-premium-landing">
 
-        {/* Typing Title */}
-        <h1 className="hero-title">
-          <span className="gradient-text">{displayText}</span>
+      <div className="bg-shape shape1"></div>
+      <div className="bg-shape shape2"></div>
+      <div className="bg-shape shape3"></div>
+
+      <motion.div
+        className="hero-content"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <h1 className="hero-typing">
+          {displayText}
           <span className="cursor">|</span>
         </h1>
 
-        {/* Rotating Words */}
         <motion.h2
           key={activeWord}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="hero-rotating mt-4"
+          className="hero-rotating"
         >
           {words[activeWord]}
         </motion.h2>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="hero-subtitle mt-4"
-        >
-          Empowering communities through football, sponsorship,
-          worship events and outreach programs.
-        </motion.p>
+        <p className="hero-description">
+          Transforming communities through sponsorship, sports programs,
+          outreach initiatives and sustainable empowerment.
+        </p>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="mt-5"
-        >
-          <Link to="/programs" className="btn neon-btn-lg me-3">
+        <div className="hero-buttons">
+          <a href="#programs" className="btn-primary">
             Explore Programs
-          </Link>
+          </a>
 
-          <Link to="/donate" className="btn neon-outline-btn">
-            Donate
-          </Link>
-        </motion.div>
+          <a href="#donate" className="btn-secondary">
+            Become a Partner
+          </a>
+        </div>
 
-        <div className="glow-circle"></div>
-      </div>
+        <div className="scroll-indicator"></div>
+      </motion.div>
     </section>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 export default function Contact() {
@@ -17,7 +18,7 @@ export default function Contact() {
   };
 
   return (
-    <section className="section-padding contact-section" style={{ backgroundColor: "#f5f6fa", padding: "80px 0" }}>
+    <section id="contact" className="section-padding contact-section" style={{ backgroundColor: "#f5f6fa", padding: "80px 0" }}>
       <div className="container">
 
         {/* Section Title */}

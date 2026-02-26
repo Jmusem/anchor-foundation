@@ -3,39 +3,78 @@ import { motion } from "framer-motion";
 
 export default function About() {
   return (
-    <section className="section-padding about-section" id="about">
-      <div className="about-overlay"></div> {/* optional subtle overlay */}
-      <div className="container text-center">
+    <section className="about-premium" id="about">
 
-        {/* Section Heading */}
-        <motion.h2
-          className="neon-text"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          About Anchor Foundation
-        </motion.h2>
+      {/* Animated Background Elements */}
+      <div className="about-bg-shape shape-a"></div>
+      <div className="about-bg-shape shape-b"></div>
 
-        {/* Glass Card Text */}
+      <div className="container">
+
+        {/* Section Header */}
         <motion.div
-          className="glass-card mx-auto"
-          initial={{ opacity: 0, y: 20 }}
+          className="about-header text-center"
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.8 }}
         >
-          <p className="mb-4">
-            Anchor Foundation is a non-profit organization dedicated to transforming the lives of children through football events, home visits, child sponsorship, and worship activities. We provide opportunities for education, personal development, and holistic growth while fostering a strong sense of community and belonging.
-          </p>
-
-          <p className="mb-4">
-            Our programs focus on nurturing talents, building leadership skills, and encouraging faith and moral values in young children. We partner with local communities, volunteers, and supporters to ensure that every child has the opportunity to thrive in a safe and inspiring environment.
-          </p>
-
-          <p>
-            With transparency, integrity, and compassion at the core of our operations, Anchor Foundation envisions a future where every child can reach their full potential and contribute positively to society. Our commitment to empowerment and care drives every initiative, ensuring meaningful impact and lasting change.
+          <span className="section-tag">Who We Are</span>
+          <h2 className="about-title">
+            About Anchor Foundation
+          </h2>
+          <p className="about-subtitle">
+            Empowering young people through opportunity, mentorship and community-driven impact.
           </p>
         </motion.div>
+
+        {/* Main Content Grid */}
+        <div className="about-grid">
+
+          <motion.div
+            className="about-card"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h4>Our Mission</h4>
+            <p>
+              We transform the lives of young people through sporty  initiatives,
+              sponsorship programs, outreach activities, and spiritual mentorship —
+              creating safe spaces where young people can grow with dignity and purpose.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="about-card"
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h4>Our Impact</h4>
+            <p>
+              By partnering with communities, volunteers, and supporters,
+              we provide education support, leadership development,
+              talent nurturing, and holistic empowerment for sustainable change.
+            </p>
+          </motion.div>
+
+        </div>
+
+        {/* Vision Block */}
+        <motion.div
+          className="about-vision"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9 }}
+        >
+          <h4>Our Vision</h4>
+          <p>
+            A future where every Young Person has access to opportunity, support,
+            and guidance to unlock their full potential and positively
+            influence society.
+          </p>
+        </motion.div>
+
       </div>
     </section>
   );
