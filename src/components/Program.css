@@ -58,7 +58,7 @@
 }
 
 .program-card {
-  background: #26394d;
+  background: #315984;
   border-radius: 20px;
   overflow: hidden;
   backdrop-filter: blur(15px);
@@ -89,7 +89,7 @@
 .btn-donate {
   display: inline-block;
   padding: 10px 25px;
-  background: #26394d;
+  background: #315984;
   color: #fff;
   font-weight: 600;
   border-radius: 10px;
