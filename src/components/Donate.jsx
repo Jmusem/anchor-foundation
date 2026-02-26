@@ -1,14 +1,24 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom"; // <-- import this
-// eslint-disable-next-line no-unused-vars
+import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "@emailjs/browser";
-import "./Donate.css";
+import {
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  TextField,
+  Button,
+  Stack,
+  Paper,
+} from "@mui/material";
 
 export default function Donate() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const initialProgram = query.get("program") || ""; // <-- read the query
+  const initialProgram = query.get("program") || "";
 
   const [selectedProgram, setSelectedProgram] = useState(initialProgram);
   const [formData, setFormData] = useState({ name: "", email: "", amount: "", message: "" });
@@ -19,7 +29,7 @@ export default function Donate() {
     { name: "Sports & Youth Empowerment", image: "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf", description: "Empower youth through sports, leadership & mentorship." },
     { name: "Street Kids Initiative", image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c", description: "Rehabilitate and reintegrate vulnerable street children." },
     { name: "Children Home Visits", image: "https://images.unsplash.com/photo-1511895426328-dc8714191300", description: "Provide emotional and material support to children homes." },
-    { name: "Medical Care Consultancy", image: "https://images.unsplash.com/photo-1584515933487-779824d29309", description: "Offer medical guidance and care support to families." }
+    { name: "Medical Care Consultancy", image: "https://images.unsplash.com/photo-1584515933487-779824d29309", description: "Offer medical guidance and care support to families." },
   ];
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -40,7 +50,7 @@ export default function Donate() {
 
   const selectedProgramData = programs.find(p => p.name === selectedProgram);
 
-  // Automatically scroll to preview if program pre-selected
+  // Scroll to preview if program preselected
   useEffect(() => {
     if (selectedProgramData) {
       const preview = document.querySelector(".program-preview_donate");
@@ -49,28 +59,69 @@ export default function Donate() {
   }, [selectedProgramData]);
 
   return (
-    <section id="donate" className="donate-section">
-      <div className="container">
-        <motion.h1 className="donate-title" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-          Support a Cause. Change a Life.
-        </motion.h1>
+    <Box
+      component="section"
+      sx={{
+        py: 12,
+        px: 3,
+        position: "relative",
+        overflow: "hidden",
+        bgcolor: "#0f172a",
+      }}
+      id="donate"
+    >
+      {/* Background soft radial gradients */}
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(circle at 20% 20%, rgba(79,157,255,0.15), transparent 40%), radial-gradient(circle at 80% 80%, rgba(56,189,248,0.12), transparent 40%)",
+          zIndex: 0,
+        }}
+      />
+
+      <Box sx={{ maxWidth: 1200, mx: "auto", position: "relative", zIndex: 1 }}>
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+          <Typography
+            variant="h3"
+            align="center"
+            sx={{
+              fontWeight: 700,
+              mb: 6,
+              background: "linear-gradient(90deg,#1a416a,#207283)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Support a Cause. Change a Life.
+          </Typography>
+        </motion.div>
 
         {/* Program Cards */}
-        <div className="program-grid_donate">
-          {programs.map((program, index) => (
-            <motion.div
-              key={index}
-              className={`program-card_donate ${selectedProgram === program.name ? "active" : ""}`}
-              whileHover={{ scale: 1.05, boxShadow: "0 15px 40px rgba(0,123,255,0.25)" }}
-              onClick={() => setSelectedProgram(program.name)}
-            >
-              <img src={program.image} alt={program.name} />
-              <div className="program-info_donate">
-                <h5>{program.name}</h5>
-              </div>
-            </motion.div>
+        <Grid container spacing={3} sx={{ mb: 6 }}>
+          {programs.map((program, idx) => (
+            <Grid item xs={12} sm={6} md={4} key={idx}>
+              <motion.div whileHover={{ scale: 1.05, boxShadow: "0 15px 40px rgba(0,123,255,0.25)" }}>
+                <Card
+                  sx={{
+                    cursor: "pointer",
+                    borderRadius: 3,
+                    overflow: "hidden",
+                    border: selectedProgram === program.name ? "2px solid #4F9DFF" : "2px solid transparent",
+                  }}
+                  onClick={() => setSelectedProgram(program.name)}
+                >
+                  <CardMedia component="img" height="180" image={program.image} alt={program.name} />
+                  <CardContent sx={{ bgcolor: "#1f2f5a" }}>
+                    <Typography variant="h6" sx={{ color: "#e0e7ff", fontWeight: 600 }}>
+                      {program.name}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </Grid>
           ))}
-        </div>
+        </Grid>
 
         {/* Program Preview */}
         <AnimatePresence>
@@ -81,33 +132,113 @@ export default function Donate() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              <img src={selectedProgramData.image} alt="preview" />
-              <div className="preview-info_donate">
-                <h3>{selectedProgramData.name}</h3>
-                <p>{selectedProgramData.description}</p>
-              </div>
+              <Paper
+                elevation={4}
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  overflow: "hidden",
+                  borderRadius: 3,
+                  mb: 6,
+                  bgcolor: "#1f2f5a",
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  image={selectedProgramData.image}
+                  alt={selectedProgramData.name}
+                  sx={{ width: { md: "40%" }, height: 200, objectFit: "cover" }}
+                />
+                <Box sx={{ p: 4, flex: 1 }}>
+                  <Typography variant="h5" sx={{ color: "#4F9DFF", fontWeight: 700, mb: 2 }}>
+                    {selectedProgramData.name}
+                  </Typography>
+                  <Typography sx={{ color: "#cfd8ff" }}>{selectedProgramData.description}</Typography>
+                </Box>
+              </Paper>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Donation Form */}
-        <motion.form className="donate-form" onSubmit={handleSubmit} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <input type="text" name="name" placeholder="Full Name" required onChange={handleChange} />
-          <input type="email" name="email" placeholder="Email Address" required onChange={handleChange} />
-          <input type="number" name="amount" placeholder="Donation Amount (USD)" required onChange={handleChange} />
-          <textarea name="message" placeholder="Optional message" onChange={handleChange}></textarea>
+        <motion.form
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{ maxWidth: 600, margin: "0 auto" }}
+        >
+          <Stack spacing={3}>
+            <TextField
+              fullWidth
+              label="Full Name"
+              name="name"
+              variant="filled"
+              onChange={handleChange}
+              InputProps={{ sx: { bgcolor: "#1f2f5a", color: "#e0e7ff" } }}
+            />
+            <TextField
+              fullWidth
+              label="Email Address"
+              type="email"
+              name="email"
+              variant="filled"
+              onChange={handleChange}
+              InputProps={{ sx: { bgcolor: "#1f2f5a", color: "#e0e7ff" } }}
+            />
+            <TextField
+              fullWidth
+              label="Donation Amount (USD)"
+              type="number"
+              name="amount"
+              variant="filled"
+              onChange={handleChange}
+              InputProps={{ sx: { bgcolor: "#1f2f5a", color: "#e0e7ff" } }}
+            />
+            <TextField
+              fullWidth
+              label="Optional Message"
+              name="message"
+              variant="filled"
+              multiline
+              rows={4}
+              onChange={handleChange}
+              InputProps={{ sx: { bgcolor: "#1f2f5a", color: "#e0e7ff" } }}
+            />
 
-          <button type="submit" className="btn-submit">Confirm Donation</button>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ bgcolor: "#4F9DFF", "&:hover": { bgcolor: "#2a76d2" }, borderRadius: 5, py: 1.5 }}
+            >
+              Confirm Donation
+            </Button>
+          </Stack>
         </motion.form>
 
+        {/* Success Popup */}
         <AnimatePresence>
           {success && (
-            <motion.div className="success-popup" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              style={{
+                position: "fixed",
+                bottom: 40,
+                right: 40,
+                background: "#4F9DFF",
+                color: "#fff",
+                padding: "16px 24px",
+                borderRadius: 12,
+                boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+                zIndex: 9999,
+              }}
+            >
               🎉 Thank you! Your donation request has been sent.
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </section>
+      </Box>
+    </Box>
   );
 }
