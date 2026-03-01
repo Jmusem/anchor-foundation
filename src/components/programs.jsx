@@ -27,6 +27,7 @@ export default function Programs() {
 
   const keyActivities = [
     "Gathering of Anchors every Thursday from 9:00 - 10:00pm",
+    "Anchor FC league games. Follow our pages FB, IG, TikTok (Anchor Foundation) to be notified of their fixtures.",
     "Health camps – We offer free diagnosis.",
     "Cycling event every 10th October",
     "Mentorship programs in primary schools, Highschool, Campuses",
@@ -202,36 +203,6 @@ export default function Programs() {
           })}
         </Grid>
 
-        {/* Upcoming Events */}
-        <Box sx={{ mt: 12 }}>
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}>
-            <Typography variant="h4" align="center" sx={{ fontWeight: 700, mb: 6, background: "linear-gradient(90deg,#1a416a,#207283)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-              Upcoming Events
-            </Typography>
-          </motion.div>
-          <Grid container spacing={4}>
-            {upcomingEvents.map((event, idx) => (
-              <Grid item xs={12} sm={6} key={idx}>
-                <motion.div whileHover={{ scale: 1.03, boxShadow: "0 15px 40px rgba(0,0,0,0.3)" }}>
-                  <Card sx={{ borderRadius: 3, overflow: "hidden", bgcolor: "rgba(255,255,255,0.05)" }}>
-                    <CardMedia component="img" height="200" image={event.image} alt={event.title} />
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom sx={{ color: "#e0e7ff" }}>
-                        {event.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mb: 1, color: "#cfd8ff" }}>
-                        {event.description}
-                      </Typography>
-                      <Typography variant="caption" color="primary">
-                        {event.date}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
 
         {/* Lightbox */}
         <AnimatePresence>

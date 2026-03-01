@@ -1,0 +1,101 @@
+/* Countdown */
+.countdown-box {
+  text-align: center;
+  margin-bottom: 80px;
+  padding: 30px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 15px;
+}
+
+.countdown-grid span {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ff8c00;
+}
+
+.countdown-grid small {
+  display: block;
+  color: #94a3b8;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(#ff8c00, transparent);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 60px;
+}
+
+.timeline-content {
+  background: rgba(255,255,255,0.04);
+  padding: 25px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 20px;
+  width: 15px;
+  height: 15px;
+  background: #ff8c00;
+  border-radius: 50%;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #111827;
+  padding: 40px;
+  border-radius: 16px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-content input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+.submit-btn {
+  background: linear-gradient(45deg, #ff8c00, #ffb347);
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}

@@ -1,24 +1,48 @@
 // eslint-disable-next-line no-unused-vars
 import { useState } from "react";
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Layout, Menu, Button, Drawer, Grid } from "antd";
-import {
-  MenuOutlined,
-  HeartOutlined,
-} from "@ant-design/icons";
+import { MenuOutlined, HeartOutlined } from "@ant-design/icons";
+import { Link, useLocation } from "react-router-dom";
 
 const { useBreakpoint } = Grid;
 
 export default function Navbar() {
   const screens = useBreakpoint();
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const isHome = location.pathname === "/";
 
   const menuItems = [
-    { key: "home", label: <a href="#hero">Home</a> },
-    { key: "about", label: <a href="#about">About</a> },
-    { key: "programs", label: <a href="#programs">Programs</a> },
-    { key: "contact", label: <a href="#contact">Contact</a> },
+    {
+      key: "home",
+      label: isHome ? <a href="#hero">Home</a> : <Link to="/">Home</Link>,
+    },
+    {
+      key: "about",
+      label: isHome ? <a href="#about">About</a> : <Link to="/#about">About</Link>,
+    },
+    {
+      key: "programs",
+      label: isHome ? (
+        <a href="#programs">Programs</a>
+      ) : (
+        <Link to="/#programs">Programs</Link>
+      ),
+    },
+    {
+      key: "events",
+      label: <Link to="/events">Events</Link>,
+    },
+    {
+      key: "contact",
+      label: isHome ? (
+        <a href="#contact">Contact</a>
+      ) : (
+        <Link to="/#contact">Contact</Link>
+      ),
+    },
   ];
 
   return (
@@ -29,18 +53,19 @@ export default function Navbar() {
       style={styles.navWrapper}
     >
       <div style={styles.container}>
-        
-        {/* Logo */}
-        <div style={styles.logo}>
-          Anchor<span style={{ color: "#4F9DFF" }}>Foundation</span>
-        </div>
 
-        {/* Desktop Menu */}
+        {/* Logo */}
+        <Link to="/" style={styles.logo}>
+          Anchor<span style={{ color: "#4F9DFF" }}>Foundation</span>
+        </Link>
+
+        {/* Desktop */}
         {screens.md && (
           <div style={styles.menuContainer}>
             <Menu
               mode="horizontal"
               items={menuItems}
+              selectedKeys={[location.pathname]}
               style={styles.menu}
             />
 
@@ -49,14 +74,14 @@ export default function Navbar() {
               icon={<HeartOutlined />}
               size="large"
               style={styles.donateBtn}
-              href="#donate"
+              href="/#donate"
             >
               Donate
             </Button>
           </div>
         )}
 
-        {/* Mobile Menu Button */}
+        {/* Mobile */}
         {!screens.md && (
           <>
             <Button
@@ -69,7 +94,9 @@ export default function Navbar() {
               placement="right"
               onClose={() => setOpen(false)}
               open={open}
-              style={{ background: "#0f172a" }}
+              styles={{
+                body: { background: "#0f172a", paddingTop: 40 },
+              }}
             >
               <Menu
                 mode="vertical"
@@ -77,10 +104,14 @@ export default function Navbar() {
                   ...menuItems,
                   {
                     key: "donate",
-                    label: <a href="#donate">Donate</a>,
+                    label: <a href="/#donate">Donate</a>,
                   },
                 ]}
-                style={{ background: "transparent", color: "#fff" }}
+                style={{
+                  background: "transparent",
+                  color: "#fff",
+                  borderRight: "none",
+                }}
               />
             </Drawer>
           </>
@@ -115,6 +146,7 @@ const styles = {
     fontWeight: 600,
     color: "#fff",
     letterSpacing: 0.5,
+    textDecoration: "none",
   },
   menuContainer: {
     display: "flex",
@@ -125,6 +157,7 @@ const styles = {
     background: "transparent",
     borderBottom: "none",
     color: "#fff",
+    minWidth: 400,
   },
   donateBtn: {
     borderRadius: 50,

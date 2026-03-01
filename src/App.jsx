@@ -8,6 +8,7 @@ import About from "./components/About";
 import Programs from "./components/programs";
 import Donate from "./components/Donate";
 import Contact from "./components/Contact";
+import Events from "./components/Events";
 import Loader from "./components/Preloader";
 
 const { Header, Content, Footer } = Layout;
@@ -59,6 +60,7 @@ function App() {
               <Hero />
               <About />
               <Programs />
+              <Events />
               <Donate />
               <Contact />
             </Content>
