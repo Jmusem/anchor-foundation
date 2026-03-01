@@ -12,7 +12,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { ArrowForward, ChevronLeft, ChevronRight, Close } from "@mui/icons-material";
-import sportsEventImg from "../assets/programs/events/sports.jpg";
+
 
 // Import images
 const footballImages = import.meta.glob("../assets/programs/sports/*.{jpg,jpeg,png}", { eager: true });
@@ -29,6 +29,7 @@ export default function Programs() {
     "Gathering of Anchors every Thursday from 9:00 - 10:00pm",
     "Anchor FC league games. Follow our pages FB, IG, TikTok (Anchor Foundation) to be notified of their fixtures.",
     "Health camps – We offer free diagnosis.",
+    "Children's Home visit annually to any of our 47 counties. In need of our help contact us.",
     "Cycling event every 10th October",
     "Mentorship programs in primary schools, Highschool, Campuses",
     "Thanksgiving every second Sunday in the month of December ",
@@ -42,14 +43,7 @@ export default function Programs() {
     { title: "Tree Planting", description: "Planting trees in schools, churches, and communities.", images: getImages(treePlantingImages) },
   ];
 
-  const upcomingEvents = [
-    {
-      title: "Sporty Tuesday Football Tournament",
-      description: "Join us for an exciting match between Anchor Fc and EA ICS FC",
-      date: "April 3, 2026",
-      image: sportsEventImg,
-    },
-  ];
+
 
   // Lightbox functions
   const openLightbox = (images, index) => setLightbox({ open: true, images, current: index });

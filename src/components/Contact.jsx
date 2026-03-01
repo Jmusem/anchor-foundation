@@ -9,7 +9,14 @@ import {
   Paper,
   Stack,
   Link,
+  IconButton,
+  Divider,
 } from "@mui/material";
+
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import MusicNoteIcon from "@mui/icons-material/MusicNote"; // TikTok substitute
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -24,40 +31,90 @@ export default function Contact() {
     console.log("Form Data:", formData);
     setSubmitted(true);
     setFormData({ name: "", email: "", message: "" });
-    setTimeout(() => setSubmitted(false), 4000); // auto hide success
+    setTimeout(() => setSubmitted(false), 4000);
   };
+const socialLinks = [
+ {
+    name: "Facebook",
+    displayName: "Anchor Foundation",
+    url: "https://www.facebook.com/share/1AvmGt3rw9/",
+    icon: <FacebookIcon />,
+    color: "#1877F2",
+  },
+  {
+    name: "Instagram",
+    displayName: "Anchor Foundation",
+    url: "https://www.instagram.com/_anchorfoundation?igsh=MTI1YXJ0amp5OXJjZQ==",
+    icon: <InstagramIcon />,
+    color: "#E4405F",
+  },
+  {
+    name: "TikTok",
+    displayName: "Anchor Foundation",
+    url: "https://vm.tiktok.com/ZS9ew3DeFtEEh-fKOs4/",
+    icon: <MusicNoteIcon />,
+    color: "#000000",
+  },
+    {
+      name: "YouTube",
+      url: "https://youtube.com/@AnchorTv254",
+      icon: <YouTubeIcon />,
+      color: "#FF0000",
+    },
+  ];
 
   return (
     <Box
       component="section"
       id="contact"
-      sx={{ bgcolor: "#0f172a", py: 12, px: 3, position: "relative", overflow: "hidden" }}
+      sx={{
+        bgcolor: "#0f172a",
+        py: 12,
+        px: 3,
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
       <Box sx={{ maxWidth: 1200, mx: "auto", position: "relative", zIndex: 1 }}>
-        {/* Section Title */}
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        {/* Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <Typography
             variant="h3"
             align="center"
             sx={{
               fontWeight: 700,
               mb: 10,
-              background: "linear-gradient(90deg,#1a416a,#207283)",
+              background: "linear-gradient(90deg,#4F9DFF,#2563EB)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
           >
-            Contact Us
+            Contact Anchor Foundation
           </Typography>
         </motion.div>
 
         <Grid container spacing={6}>
-          {/* Contact Form */}
+          {/* FORM */}
           <Grid item xs={12} md={6}>
-            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               <Paper
-                elevation={6}
-                sx={{ p: 5, borderRadius: 3, bgcolor: "#1f2f5a", color: "#e0e7ff" }}
+                elevation={10}
+                sx={{
+                  p: 5,
+                  borderRadius: 4,
+                  bgcolor: "rgba(31,47,90,0.7)",
+                  backdropFilter: "blur(15px)",
+                  color: "#e0e7ff",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
               >
                 <form onSubmit={handleSubmit}>
                   <Stack spacing={3}>
@@ -68,9 +125,10 @@ export default function Contact() {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      InputProps={{ sx: { bgcolor: "#15223f", color: "#e0e7ff" } }}
+                      InputProps={{ sx: { bgcolor: "#15223f", color: "#fff" } }}
                       required
                     />
+
                     <TextField
                       fullWidth
                       variant="filled"
@@ -79,9 +137,10 @@ export default function Contact() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      InputProps={{ sx: { bgcolor: "#15223f", color: "#e0e7ff" } }}
+                      InputProps={{ sx: { bgcolor: "#15223f", color: "#fff" } }}
                       required
                     />
+
                     <TextField
                       fullWidth
                       variant="filled"
@@ -91,25 +150,26 @@ export default function Contact() {
                       onChange={handleChange}
                       multiline
                       rows={5}
-                      InputProps={{ sx: { bgcolor: "#15223f", color: "#e0e7ff" } }}
+                      InputProps={{ sx: { bgcolor: "#15223f", color: "#fff" } }}
                       required
                     />
 
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      sx={{
-                        bgcolor: "#4F9DFF",
-                        "&:hover": { bgcolor: "#2a76d2" },
-                        borderRadius: 3,
-                        py: 1.5,
-                        fontWeight: 600,
-                      }}
-                      whileHover={{ scale: 1.03 }}
-                      component={motion.div}
-                    >
-                      Send Message
-                    </Button>
+                    <motion.div whileHover={{ scale: 1.03 }}>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{
+                          bgcolor: "#4F9DFF",
+                          "&:hover": { bgcolor: "#2563EB" },
+                          borderRadius: 3,
+                          py: 1.5,
+                          fontWeight: 600,
+                        }}
+                        fullWidth
+                      >
+                        Send Message
+                      </Button>
+                    </motion.div>
                   </Stack>
                 </form>
 
@@ -119,7 +179,11 @@ export default function Contact() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       exit={{ scale: 0 }}
-                      style={{ marginTop: 16, color: "#4F9DFF", fontWeight: 600 }}
+                      style={{
+                        marginTop: 16,
+                        color: "#4F9DFF",
+                        fontWeight: 600,
+                      }}
                     >
                       🎉 Thank you! Your message has been sent.
                     </motion.div>
@@ -129,51 +193,96 @@ export default function Contact() {
             </motion.div>
           </Grid>
 
-          {/* Contact Info */}
+          {/* CONTACT INFO */}
           <Grid item xs={12} md={6}>
-            <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
               <Paper
-                elevation={6}
-                sx={{ p: 5, borderRadius: 3, bgcolor: "#1f2f5a", color: "#e0e7ff" }}
+                elevation={10}
+                sx={{
+                  p: 5,
+                  borderRadius: 4,
+                  bgcolor: "rgba(31,47,90,0.7)",
+                  backdropFilter: "blur(15px)",
+                  color: "#e0e7ff",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
               >
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 3, color: "#4F9DFF" }}>
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 700, mb: 3, color: "#4F9DFF" }}
+                >
                   Get in Touch
                 </Typography>
+
                 <Typography sx={{ mb: 3, color: "#cfd8ff" }}>
-                  We’d love to hear from you! Reach us via email, phone, or visit our office.
+                  We’d love to hear from you! Connect with us through our
+                  official platforms.
                 </Typography>
 
                 <Stack spacing={1.5}>
                   <Typography>
                     <strong>Email:</strong>{" "}
-                    <Link href="mailto:info@anchorfoundation.org" sx={{ color: "#4F9DFF" }}>info@anchorfoundation.org</Link>
+                    <Link
+                      href="mailto:info@anchorfoundation.org"
+                      sx={{ color: "#4F9DFF" }}
+                    >
+                      info@anchorfoundation.org
+                    </Link>
                   </Typography>
+
                   <Typography>
                     <strong>Phone:</strong>{" "}
-                    <Link href="tel:+254741973192" sx={{ color: "#4F9DFF" }}>+254 741973192</Link>
+                    <Link
+                      href="tel:+254741973192"
+                      sx={{ color: "#4F9DFF" }}
+                    >
+                      +254 741 973 192
+                    </Link>
                   </Typography>
+
                   <Typography>
-                    <strong>Address:</strong> 123 Anchor Street, Nairobi, Kenya
+                    <strong>Address:</strong> Nairobi, Kenya
                   </Typography>
                 </Stack>
 
-                <Stack direction="row" spacing={2} mt={4}>
-                  <Link href="https://facebook.com" target="_blank" sx={{ color: "#3b5998" }}>Facebook</Link>
-                  <Link href="https://instagram.com" target="_blank" sx={{ color: "#E4405F" }}>Instagram</Link>
-                  <Link href="https://twitter.com" target="_blank" sx={{ color: "#1DA1F2" }}>Twitter</Link>
-                </Stack>
+                <Divider sx={{ my: 4, borderColor: "rgba(255,255,255,0.1)" }} />
 
-                <Box mt={4} sx={{ borderRadius: 3, overflow: "hidden", boxShadow: "0 6px 18px rgba(0,0,0,0.1)" }}>
-                  <iframe
-                    title="Anchor Foundation Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3974.012345678!2d36.8219!3d-1.2921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f173e2bde!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2sus!4v1629987654321!5m2!1sen!2sus"
-                    width="100%"
-                    height="250"
-                    style={{ border: 0 }}
-                    allowFullScreen=""
-                    loading="lazy"
-                  />
-                </Box>
+                {/* SOCIAL MEDIA */}
+                <Typography
+                  variant="h6"
+                  sx={{ mb: 3, color: "#4F9DFF", fontWeight: 600 }}
+                >
+                  Follow Us
+                </Typography>
+
+                <Stack direction="row" spacing={2}>
+                  {socialLinks.map((social, index) => (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.2, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <IconButton
+                        href={social.url}
+                        target="_blank"
+                        sx={{
+                          bgcolor: "rgba(255,255,255,0.08)",
+                          color: social.color,
+                          "&:hover": {
+                            bgcolor: social.color,
+                            color: "#fff",
+                          },
+                        }}
+                      >
+                        {social.icon}
+                      </IconButton>
+                    </motion.div>
+                  ))}
+                </Stack>
               </Paper>
             </motion.div>
           </Grid>

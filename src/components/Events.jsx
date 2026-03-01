@@ -30,7 +30,7 @@ const events = [
     date: "2026-10-10T08:00:00",
     displayDate: "10 Oct 2026",
     title: "Anchor Ride Day",
-    venue: "Thiba",
+    venue: "Ngurubani",
     time: "8:00 AM – 2:00 PM",
   },
   {
