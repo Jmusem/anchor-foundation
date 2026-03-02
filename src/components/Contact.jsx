@@ -57,7 +57,7 @@ const socialLinks = [
   },
     {
       name: "YouTube",
-      url: "https://youtube.com/@AnchorTv254",
+      url: "https://youtube.com/@anchortv_254?si=nLRcUz6Nrbiwu8wM",
       icon: <YouTubeIcon />,
       color: "#FF0000",
     },
