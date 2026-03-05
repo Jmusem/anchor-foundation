@@ -125,7 +125,7 @@ export default function About() {
               <Text style={styles.popupTag}>Anchor Daily</Text>
 
               <Title level={4} style={styles.popupTitle}>
-                You are known by what you say and your actions
+                Never Trade your Authenticity for Approval
               </Title>
 
               <Paragraph style={styles.popupWords}>
