@@ -125,7 +125,7 @@ export default function About() {
               <Text style={styles.popupTag}>Anchor Daily</Text>
 
               <Title level={4} style={styles.popupTitle}>
-                Never Trade your Authenticity for Approval
+                Faith Opens Eyes that Fear Tries to Blind.
               </Title>
 
               <Paragraph style={styles.popupWords}>
