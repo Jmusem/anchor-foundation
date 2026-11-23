@@ -3,7 +3,7 @@
 export const SITE = {
   name: 'Anchor Foundation',
   url: typeof __SITE_URL__ !== 'undefined' ? __SITE_URL__ : 'https://anchorfoundation.co.ke',
-  email: 'info@anchorfoundation.org',
+  email: 'info@anchorfoundation.co.ke',
   phone: '+254 741 973 192',
   phoneHref: 'tel:+254741973192',
   whatsapp: 'https://wa.me/254741973192',
