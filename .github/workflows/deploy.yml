@@ -39,7 +39,7 @@ jobs:
       - name: Package
         run: |
           [ -n "$CPANEL_TOKEN" ] || { echo "::error::Secret CPANEL_TOKEN is missing (see DEPLOY.md)"; exit 1; }
-          (cd dist && zip -qr ../site.zip . -x '.*' && zip -qr ../site.zip .htaccess)
+          (cd dist && zip -qr ../site.zip .)
           ls -lh site.zip
 
       - name: Upload to cPanel
