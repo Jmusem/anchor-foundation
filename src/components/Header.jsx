@@ -1,11 +1,10 @@
 import { NAV, SITE } from '../data'
 import { logo } from '../assets'
-import { useInstall, useScrollSpy, useTheme } from '../hooks'
-import { Download, Moon, Sun } from './Icons'
+import { useInstall, useScrollSpy } from '../hooks'
+import { Download, Heart } from './Icons'
 
 export default function Header({ onIosHint }) {
   const active = useScrollSpy()
-  const [theme, toggle] = useTheme()
   const { canInstall, showIosHint, install } = useInstall()
 
   return (
@@ -16,23 +15,18 @@ export default function Header({ onIosHint }) {
         </a>
 
         <nav className="nav" aria-label="Main">
-          {NAV.map((n, i) => (
-            <a key={n.href} href={n.href} className={active === n.href.slice(1) ? 'is-active' : ''}>
-              <sup>{String(i + 1).padStart(2, '0')}</sup>{n.label}
-            </a>
+          {NAV.map((n) => (
+            <a key={n.href} href={n.href} className={active === n.href.slice(1) ? 'is-active' : ''}>{n.label}</a>
           ))}
         </nav>
 
         <div className="header__tools">
           {(canInstall || showIosHint) && (
-            <button className="icon-btn icon-btn--text" onClick={canInstall ? install : onIosHint} aria-label="Install the Anchor Foundation app">
-              <Download size={18} aria-hidden /> <span>Install app</span>
+            <button className="btn btn--glass btn--sm" onClick={canInstall ? install : onIosHint} aria-label="Install the Anchor Foundation app">
+              <Download size={16} aria-hidden /> <span className="hide-sm">Install app</span>
             </button>
           )}
-          <button className="icon-btn" onClick={toggle} aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
-            {theme === 'dark' ? <Sun size={18} aria-hidden /> : <Moon size={18} aria-hidden />}
-          </button>
-          <a href="#donate" className="btn btn--ink btn--sm header__give">Give</a>
+          <a href="#donate" className="btn btn--primary btn--sm"><Heart size={16} aria-hidden /> Donate</a>
         </div>
       </div>
     </header>

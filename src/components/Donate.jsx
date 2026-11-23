@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { SITE } from '../data'
-import { Check, Copy, Mail } from './Icons'
+import { Check, Copy, Mail, Smartphone } from './Icons'
 import Reveal from './Reveal'
 
 export default function Donate() {
@@ -16,26 +16,30 @@ export default function Donate() {
   const body = encodeURIComponent(`Hello Anchor Foundation,\n\nI have made a donation via M-Pesa Till Number ${SITE.till}.\nPlease confirm receipt.\n\nThank you.`)
 
   return (
-    <section className="donate" id="donate">
+    <section className="section donate" id="donate">
       <div className="container">
-        <p className="label label--light">05 — Give hope</p>
-        <Reveal as="h2" className="display display--light">Your gift becomes a meal, a check-up, a tree.</Reveal>
+        <Reveal className="head">
+          <span className="tag tag--gold">Give hope</span>
+          <h2>Support Anchor Foundation</h2>
+          <p>Your gift funds meals for children, free health camps, youth sports, mentorship and trees for our schools.</p>
+        </Reveal>
+
         <div className="donate__grid">
-          <Reveal className="donate__till">
-            <p>M-Pesa Till Number</p>
-            <div className="till" aria-label={`M-Pesa till number ${SITE.till.split('').join(' ')}`}>{SITE.till}</div>
-            <button className="btn btn--paper btn--lg" onClick={copy}>
+          <Reveal className="mpesa">
+            <Smartphone size={44} aria-hidden />
+            <p className="mpesa__label">M-Pesa Till Number</p>
+            <div className="mpesa__num" aria-label={`M-Pesa till number ${SITE.till.split('').join(' ')}`}>{SITE.till}</div>
+            <button className="btn btn--white btn--lg" onClick={copy}>
               {copied ? <><Check size={18} aria-hidden /> Copied</> : <><Copy size={18} aria-hidden /> Copy till number</>}
             </button>
+            <p className="mpesa__how">M-Pesa → Lipa na M-Pesa → Buy Goods &amp; Services → enter the till number → confirm payment.</p>
           </Reveal>
-          <Reveal className="donate__steps" delay={100}>
-            <ol>
-              <li><b>1</b><span>Open <strong>M-Pesa</strong> → <strong>Lipa na M-Pesa</strong></span></li>
-              <li><b>2</b><span>Choose <strong>Buy Goods &amp; Services</strong></span></li>
-              <li><b>3</b><span>Enter the till number and confirm</span></li>
-            </ol>
-            <a className="donate__confirm" href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}>
-              <Mail size={18} aria-hidden /> Already given? Tell us so we can say thank you
+
+          <Reveal className="glass thanks" delay={100}>
+            <h3>Already made a donation?</h3>
+            <p>Let us know so we can acknowledge and confirm your support — your generosity changes lives.</p>
+            <a className="btn btn--primary btn--lg" href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}>
+              <Mail size={18} aria-hidden /> I have made a donation
             </a>
           </Reveal>
         </div>
