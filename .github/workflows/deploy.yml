@@ -1,5 +1,6 @@
-# Builds the site and uploads it to the Pinnacle hosting account on every push to the live branch.
-# One-time setup: add the repository secrets listed in DEPLOY.md (Settings → Secrets and variables → Actions).
+# Builds the site and uploads it to the Pinnacle (cPanel) account on every push to main.
+# Uses cPanel's HTTPS API (port 2083) because the host blocks outside FTP (port 21).
+# Setup: see DEPLOY.md (repository secrets CPANEL_USER, CPANEL_HOST, CPANEL_TOKEN).
 name: Build & deploy
 
 on:
@@ -14,6 +15,11 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      CPANEL_USER: ${{ secrets.CPANEL_USER }}
+      CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+      CPANEL_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+      WEB_DIR: ${{ vars.WEB_DIR || '/public_html' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -30,13 +36,40 @@ jobs:
           SITE_URL: ${{ vars.SITE_URL || 'https://anchorfoundation.co.ke' }}
           VITE_FORM_ENDPOINT: ${{ vars.FORM_ENDPOINT }}
 
-      - name: Upload to hosting (FTP)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
-          port: ${{ vars.FTP_PORT || 21 }}
-          local-dir: ./dist/
-          server-dir: ${{ vars.FTP_DIR || './public_html/' }}
+      - name: Package
+        run: |
+          [ -n "$CPANEL_TOKEN" ] || { echo "::error::Secret CPANEL_TOKEN is missing (see DEPLOY.md)"; exit 1; }
+          (cd dist && zip -qr ../site.zip . -x '.*' && zip -qr ../site.zip .htaccess)
+          ls -lh site.zip
+
+      - name: Upload to cPanel
+        run: |
+          API="https://$CPANEL_HOST:2083"
+          AUTH="Authorization: cpanel $CPANEL_USER:$CPANEL_TOKEN"
+          check() { echo "$1"; echo "$1" | grep -q '"status":1' || { echo "::error::cPanel API call failed"; exit 1; }; }
+
+          echo "Uploading..."
+          check "$(curl -sS --fail-with-body -m 300 -H "$AUTH" \
+            -F "dir=$WEB_DIR" -F "file-1=@site.zip;filename=_deploy.zip" \
+            "$API/execute/Fileman/upload_files")"
+
+          echo "Extracting over the live site..."
+          R=$(curl -sS --fail-with-body -m 300 -H "$AUTH" -G "$API/json-api/cpanel" \
+            --data-urlencode "cpanel_jsonapi_user=$CPANEL_USER" \
+            --data-urlencode "cpanel_jsonapi_apiversion=2" \
+            --data-urlencode "cpanel_jsonapi_module=Fileman" \
+            --data-urlencode "cpanel_jsonapi_func=fileop" \
+            --data-urlencode "op=extract" \
+            --data-urlencode "sourcefiles=$WEB_DIR/_deploy.zip" \
+            --data-urlencode "destfiles=$WEB_DIR")
+          echo "$R"
+          echo "$R" | grep -q '"result":"1"' || { echo "::error::Extract failed"; exit 1; }
+
+          echo "Cleaning up..."
+          curl -sS -m 60 -H "$AUTH" -G "$API/execute/Fileman/delete_files" \
+            --data-urlencode "files=$WEB_DIR/_deploy.zip" >/dev/null || true
+
+      - name: Check site is live
+        run: |
+          sleep 3
+          curl -fsSL "${{ vars.SITE_URL || 'https://anchorfoundation.co.ke' }}/" | grep -q "Anchor Foundation" && echo "Site is serving the new build"
