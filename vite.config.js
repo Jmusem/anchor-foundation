@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // The public address of the site. Used for canonical URLs, Open Graph, sitemap and
 // structured data. Override at build time with:  SITE_URL=https://example.org npm run build
-const SITE_URL = (process.env.SITE_URL || 'https://anchorfoundation.org').replace(/\/$/, '')
+const SITE_URL = (process.env.SITE_URL || 'https://anchorfoundation.co.ke').replace(/\/$/, '')
 
 // https://vite.dev/config/
 export default defineConfig({

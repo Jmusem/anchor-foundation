@@ -15,7 +15,7 @@ Every push to `main` builds the site on GitHub and uploads it to the hosting acc
 **Variables** (all optional)
 | Name | Default | Purpose |
 |---|---|---|
-| `SITE_URL` | `https://anchorfoundation.org` | Real public address – used for SEO (canonical, sitemap, share image) |
+| `SITE_URL` | `https://anchorfoundation.co.ke` | Real public address – used for SEO (canonical, sitemap, share image) |
 | `FTP_DIR` | `./public_html/` | Folder the site is uploaded to |
 | `FTP_PROTOCOL` | `ftps` | Use `ftp` if the host has no FTPS |
 | `FORM_ENDPOINT` | – | e.g. a Formspree URL so the contact form delivers straight to email |

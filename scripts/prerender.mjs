@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, rmSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
 import { resolve } from 'node:path'
 
-const SITE_URL = (process.env.SITE_URL || 'https://anchorfoundation.org').replace(/\/$/, '')
+const SITE_URL = (process.env.SITE_URL || 'https://anchorfoundation.co.ke').replace(/\/$/, '')
 const { render } = await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href)
 
 const file = 'dist/index.html'
