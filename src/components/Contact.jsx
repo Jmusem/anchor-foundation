@@ -52,7 +52,7 @@ export default function Contact() {
             <label>Email address<input name="email" type="email" autoComplete="email" required /></label>
             <label>Message<textarea name="message" rows="5" required /></label>
             <input className="hp" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" />
-            <button className="btn btn--primary btn--lg" type="submit" disabled={state === 'sending'}>
+            <button className="btn btn--orange btn--lg" type="submit" disabled={state === 'sending'}>
               <Send size={18} aria-hidden /> {state === 'sending' ? 'Sending…' : 'Send message'}
             </button>
             <p className="form__status" role="status" aria-live="polite">

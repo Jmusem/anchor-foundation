@@ -6,10 +6,39 @@ import Reveal from './Reveal'
 const img = photo('anchor_5')
 const img2 = photo('worship1')
 
+const TILES = [
+  { key: 'programs/homevisit/homevisit_9', label: 'Children’s Home Visits' },
+  { key: 'programs/treeplanting/e', label: 'Tree Planting' },
+  { key: 'programs/sports/anch_sport4', label: 'Sporty Events' },
+  { key: 'programs/worship/a', label: 'Worship Concerts' },
+].map((t) => ({ ...t, ...photo(t.key) }))
+
 export default function About() {
   return (
     <section className="section" id="about">
       <div className="container">
+        <Reveal className="intro">
+          <div>
+            <span className="tag">What we can do</span>
+            <h2>We believe that we can save more lives with you</h2>
+          </div>
+          <p>
+            Anchor Foundation brings people together to feed children, care for the sick, mentor the young, plant trees
+            and grow faith. Every shilling and every volunteer hour turns into real, visible change in the community.
+          </p>
+        </Reveal>
+        <ul className="tiles">
+          {TILES.map((t, i) => (
+            <Reveal as="li" key={t.key} delay={i * 70}>
+              <a href="#programs">
+                <img src={t.thumb} width={t.w} height={t.h} alt={t.label} loading="lazy" decoding="async" />
+                <span>{t.label}</span>
+              </a>
+            </Reveal>
+          ))}
+        </ul>
+
+        <div className="space" />
         <Reveal className="head">
           <span className="tag">Who we are</span>
           <h2>About Anchor Foundation</h2>

@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { SITE } from '../data'
 import { Check, Copy, Mail, Smartphone } from './Icons'
+import { photo } from '../assets'
 import Reveal from './Reveal'
+
+const bg = photo('programs/homevisit/homevisit_9')
 
 export default function Donate() {
   const [copied, setCopied] = useState(false)
@@ -17,8 +20,10 @@ export default function Donate() {
 
   return (
     <section className="section donate" id="donate">
-      <div className="container">
-        <Reveal className="head">
+      <img className="donate__bg" src={bg.full} alt="" loading="lazy" decoding="async" />
+      <div className="donate__shade" />
+      <div className="container donate__in">
+        <Reveal className="head head--light">
           <span className="tag tag--gold">Give hope</span>
           <h2>Support Anchor Foundation</h2>
           <p>Your gift funds meals for children, free health camps, youth sports, mentorship and trees for our schools.</p>
@@ -38,7 +43,7 @@ export default function Donate() {
           <Reveal className="glass thanks" delay={100}>
             <h3>Already made a donation?</h3>
             <p>Let us know so we can acknowledge and confirm your support — your generosity changes lives.</p>
-            <a className="btn btn--primary btn--lg" href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}>
+            <a className="btn btn--orange btn--lg" href={`mailto:${SITE.email}?subject=${subject}&body=${body}`}>
               <Mail size={18} aria-hidden /> I have made a donation
             </a>
           </Reveal>

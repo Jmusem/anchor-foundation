@@ -77,7 +77,7 @@ export default function Programs() {
             ))}
           </div>
           {!all && moments.length > 8 && (
-            <div className="center"><button className="btn btn--glass btn--lg" onClick={() => setAll(true)}>Show all {moments.length} photos</button></div>
+            <div className="center"><button className="btn btn--line btn--lg" onClick={() => setAll(true)}>Show all {moments.length} photos</button></div>
           )}
         </div>
       </section>
