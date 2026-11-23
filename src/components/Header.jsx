@@ -1,56 +1,39 @@
-import { useEffect, useState } from 'react'
-import { NAV } from '../data'
+import { NAV, SITE } from '../data'
 import { logo } from '../assets'
-import { Heart, Menu, X } from './Icons'
+import { useInstall, useScrollSpy, useTheme } from '../hooks'
+import { Download, Moon, Sun } from './Icons'
 
-export default function Header() {
-  const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    const onKey = (e) => e.key === 'Escape' && setOpen(false)
-    window.addEventListener('keydown', onKey)
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [open])
-
-  const close = () => setOpen(false)
+export default function Header({ onIosHint }) {
+  const active = useScrollSpy()
+  const [theme, toggle] = useTheme()
+  const { canInstall, showIosHint, install } = useInstall()
 
   return (
-    <header className={`header ${scrolled || open ? 'is-solid' : ''}`}>
+    <header className="header">
       <div className="container header__bar">
-        <a href="#top" className="brand" aria-label="Anchor Foundation – home" onClick={close}>
-          <img src={logo} alt="Anchor Foundation" width="150" height="86" />
+        <a href="#top" className="brand" aria-label={`${SITE.name} – home`}>
+          <img src={logo} alt={SITE.name} width="120" height="68" />
         </a>
 
-        <nav id="site-nav" className={`nav ${open ? 'is-open' : ''}`} aria-label="Main">
-          {NAV.map((n) => (
-            <a key={n.href} href={n.href} onClick={close}>{n.label}</a>
+        <nav className="nav" aria-label="Main">
+          {NAV.map((n, i) => (
+            <a key={n.href} href={n.href} className={active === n.href.slice(1) ? 'is-active' : ''}>
+              <sup>{String(i + 1).padStart(2, '0')}</sup>{n.label}
+            </a>
           ))}
-          <a href="#donate" className="btn btn--primary btn--sm nav__donate" onClick={close}>
-            <Heart size={16} aria-hidden /> Donate
-          </a>
         </nav>
 
-        <button
-          className="menu-btn"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          aria-controls="site-nav"
-          onClick={() => setOpen((o) => !o)}
-        >
-          {open ? <X size={26} /> : <Menu size={26} />}
-        </button>
+        <div className="header__tools">
+          {(canInstall || showIosHint) && (
+            <button className="icon-btn icon-btn--text" onClick={canInstall ? install : onIosHint} aria-label="Install the Anchor Foundation app">
+              <Download size={18} aria-hidden /> <span>Install app</span>
+            </button>
+          )}
+          <button className="icon-btn" onClick={toggle} aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
+            {theme === 'dark' ? <Sun size={18} aria-hidden /> : <Moon size={18} aria-hidden />}
+          </button>
+          <a href="#donate" className="btn btn--ink btn--sm header__give">Give</a>
+        </div>
       </div>
     </header>
   )

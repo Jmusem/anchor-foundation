@@ -3,14 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <script>document.documentElement.classList.add('js')</script>
+    <script>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        d.setAttribute('data-theme', t);
+      })();
+    </script>
 
     <title>Anchor Foundation | Mindset, Equipping &amp; Empowerment in Kenya</title>
     <meta name="description" content="Anchor Foundation is a Kenyan community organisation empowering youth and families through sports, worship, children's home visits, free health camps, mentorship and tree planting. Join us or donate via M-Pesa." />
     <meta name="keywords" content="Anchor Foundation, Kenya charity, community outreach, youth empowerment, children's home visits, free health camp, tree planting, Anchor FC, Gathering of Anchors, M-Pesa donation" />
     <meta name="author" content="Anchor Foundation" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <meta name="theme-color" content="#0a1a4f" />
+    <meta name="theme-color" content="#070b24" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Anchor" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="canonical" href="__SITE_URL__/" />
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -35,7 +49,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" />
   </head>
   <body>
     <div id="root"><!--app-html--></div>

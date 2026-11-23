@@ -1,40 +1,58 @@
-import { photo } from '../assets'
-import { PILLARS } from '../data'
+import { EVENTS, PROGRAMS } from '../data'
+import { filePhotos, folderPhotos } from '../assets'
 import { ArrowRight, Heart } from './Icons'
 
-const hero = photo('homevisit1')
+const strip = [
+  ...folderPhotos('homevisit').slice(0, 3),
+  ...folderPhotos('sports').slice(0, 3),
+  ...folderPhotos('worship').slice(0, 3),
+  ...folderPhotos('treeplanting').slice(0, 3),
+  ...filePhotos(['anchor_5', 'worship2']),
+]
+
+const FACTS = [
+  { n: PROGRAMS.length, l: 'Programs running' },
+  { n: EVENTS.length, l: 'Events on the 2026 calendar' },
+  { n: '47', l: 'Counties we can reach' },
+  { n: 'Thu', l: 'Gathering of Anchors, weekly' },
+]
 
 export default function Hero() {
   return (
     <section className="hero" id="top">
-      <img
-        className="hero__bg"
-        src={hero.full}
-        srcSet={`${hero.thumb} 640w, ${hero.full} 1600w`}
-        sizes="100vw"
-        alt="Anchor Foundation volunteers serving a meal to children"
-        fetchPriority="high"
-        decoding="async"
-      />
-      <div className="hero__overlay" />
-      <div className="container hero__inner">
-        <p className="eyebrow eyebrow--light">Kenya · Community · Faith</p>
-        <h1>
-          Empowering communities through <span className="hero__accent">mindset, equipping &amp; empowerment.</span>
+      <div className="container">
+        <p className="kicker"><span className="dot" /> Anchor Foundation · Kenya</p>
+        <h1 className="hero__title">
+          <span className="sr-only">Anchor Foundation – empowering communities in Kenya through </span>
+          <span className="l1">Mindset.</span>
+          <span className="l2">Equipping.</span>
+          <span className="l3">Empowerment.</span>
         </h1>
-        <p className="hero__lead">
-          Anchor Foundation transforms lives through youth sports, worship, children’s home visits, free health camps,
-          mentorship and tree planting — one community at a time.
-        </p>
-        <div className="hero__cta">
-          <a href="#programs" className="btn btn--primary btn--lg">Discover our work <ArrowRight size={18} aria-hidden /></a>
-          <a href="#donate" className="btn btn--ghost btn--lg"><Heart size={18} aria-hidden /> Support the mission</a>
+        <div className="hero__row">
+          <p className="hero__lead">
+            We lift communities through youth sports, worship, children’s home visits, free health camps, mentorship and tree planting — one life at a time.
+          </p>
+          <div className="hero__cta">
+            <a href="#programs" className="btn btn--ink btn--lg">See our work <ArrowRight size={18} aria-hidden /></a>
+            <a href="#donate" className="btn btn--hot btn--lg"><Heart size={18} aria-hidden /> Give today</a>
+          </div>
         </div>
-        <ul className="hero__pillars">
-          {PILLARS.map((p) => (
-            <li key={p.title}>{p.title}</li>
+      </div>
+
+      <div className="strip" aria-hidden="true">
+        <div className="strip__track">
+          {[...strip, ...strip].map((p, i) => (
+            <img key={i} src={p.thumb} width={p.w} height={p.h} alt="" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
           ))}
-        </ul>
+        </div>
+      </div>
+
+      <div className="container">
+        <dl className="facts">
+          {FACTS.map((f) => (
+            <div key={f.l}><dt>{f.n}</dt><dd>{f.l}</dd></div>
+          ))}
+        </dl>
       </div>
     </section>
   )

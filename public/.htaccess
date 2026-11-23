@@ -32,5 +32,11 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
+<FilesMatch "^(sw.js|site.webmanifest)$">
+  <IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, must-revalidate"
+  </IfModule>
+</FilesMatch>
+
 AddType application/manifest+json .webmanifest
 ErrorDocument 404 /index.html

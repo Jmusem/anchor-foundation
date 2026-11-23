@@ -8,6 +8,10 @@ const logo = "src/assets/logo_anchor.webp"; // 600x342, transparent
 const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#0a1a4f"/><path d="M118 410 L256 104 L394 410" fill="none" stroke="#fff" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/><path d="M256 372 C196 332 186 284 222 272 C244 266 256 286 256 286 C256 286 268 266 290 272 C326 284 316 332 256 372Z" fill="#e5242b"/></svg>');
 const square = async (size) => sharp(svg).resize(size, size).png();
 
+// Maskable icon: full-bleed navy with the mark inside the safe zone (Android crops it to a circle/squircle).
+const maskable = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0a1a4f"/><g transform="translate(256 256) scale(.72) translate(-256 -256)"><path d="M118 410 L256 104 L394 410" fill="none" stroke="#fff" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/><path d="M256 372 C196 332 186 284 222 272 C244 266 256 286 256 286 C256 286 268 266 290 272 C326 284 316 332 256 372Z" fill="#e5242b"/></g></svg>');
+await sharp(maskable).resize(512, 512).png().toFile('public/icon-maskable-512.png');
+
 for (const [name, size] of [["icon-512.png", 512], ["icon-192.png", 192], ["apple-touch-icon.png", 180], ["favicon-48.png", 48], ["favicon-32.png", 32]]) {
   await (await square(size)).toFile(`public/${name}`);
 }

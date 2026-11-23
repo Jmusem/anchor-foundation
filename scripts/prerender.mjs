@@ -20,5 +20,9 @@ writeFileSync('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 `)
 writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`)
 
+// Stamp the service worker so every deploy invalidates old caches.
+const sw = readFileSync('dist/sw.js', 'utf8').replaceAll('__BUILD__', Date.now().toString(36))
+writeFileSync('dist/sw.js', sw)
+
 rmSync('dist-ssr', { recursive: true, force: true })
 console.log(`Prerendered dist/index.html (${SITE_URL}) + sitemap.xml + robots.txt`)
