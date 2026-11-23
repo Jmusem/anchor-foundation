@@ -1,293 +1,96 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Box,
-  Grid,
-  Typography,
-  TextField,
-  Button,
-  Paper,
-  Stack,
-  Link,
-  IconButton,
-  Divider,
-} from "@mui/material";
+import { useState } from 'react'
+import { SITE, SOCIALS } from '../data'
+import { Mail, MapPin, Phone, Send } from './Icons'
+import { SOCIAL_ICONS } from './Icons'
+import Reveal from './Reveal'
 
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import MusicNoteIcon from "@mui/icons-material/MusicNote"; // TikTok substitute
+// Optional: set VITE_FORM_ENDPOINT (e.g. a Formspree URL) at build time to deliver messages straight to your inbox.
+// Without it the form opens the visitor's email app with the message pre-filled, so nothing is ever lost.
+const ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [state, setState] = useState('idle') // idle | sending | sent | error
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const data = Object.fromEntries(new FormData(form))
+    if (data.website) return // honeypot
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data:", formData);
-    setSubmitted(true);
-    setFormData({ name: "", email: "", message: "" });
-    setTimeout(() => setSubmitted(false), 4000);
-  };
-const socialLinks = [
- {
-    name: "Facebook",
-    displayName: "Anchor Foundation",
-    url: "https://www.facebook.com/share/1AvmGt3rw9/",
-    icon: <FacebookIcon />,
-    color: "#1877F2",
-  },
-  {
-    name: "Instagram",
-    displayName: "Anchor Foundation",
-    url: "https://www.instagram.com/_anchorfoundation?igsh=MTI1YXJ0amp5OXJjZQ==",
-    icon: <InstagramIcon />,
-    color: "#E4405F",
-  },
-  {
-    name: "TikTok",
-    displayName: "Anchor Foundation",
-    url: "https://vm.tiktok.com/ZS9ew3DeFtEEh-fKOs4/",
-    icon: <MusicNoteIcon />,
-    color: "#000000",
-  },
-    {
-      name: "YouTube",
-      url: "https://youtube.com/@anchortv_254?si=nLRcUz6Nrbiwu8wM",
-      icon: <YouTubeIcon />,
-      color: "#FF0000",
-    },
-  ];
+    if (ENDPOINT) {
+      setState('sending')
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ name: data.name, email: data.email, message: data.message }),
+        })
+        if (!res.ok) throw new Error('bad status')
+        form.reset()
+        setState('sent')
+      } catch {
+        setState('error')
+      }
+    } else {
+      const subject = encodeURIComponent(`Website message from ${data.name}`)
+      const body = encodeURIComponent(`${data.message}\n\n— ${data.name} (${data.email})`)
+      window.location.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`
+      setState('sent')
+    }
+  }
 
   return (
-    <Box
-      component="section"
-      id="contact"
-      sx={{
-        bgcolor: "#0f172a",
-        py: 12,
-        px: 3,
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <Box sx={{ maxWidth: 1200, mx: "auto", position: "relative", zIndex: 1 }}>
-        {/* Title */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <Typography
-            variant="h3"
-            align="center"
-            sx={{
-              fontWeight: 700,
-              mb: 10,
-              background: "linear-gradient(90deg,#4F9DFF,#2563EB)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Contact Anchor Foundation
-          </Typography>
-        </motion.div>
+    <section className="section section--tint" id="contact">
+      <div className="container">
+        <Reveal className="section__head">
+          <p className="eyebrow">Get in touch</p>
+          <h2>Contact Anchor Foundation</h2>
+          <p className="lead">Want to volunteer, partner with us, or request a visit? We’d love to hear from you.</p>
+        </Reveal>
 
-        <Grid container spacing={6}>
-          {/* FORM */}
-          <Grid item xs={12} md={6}>
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <Paper
-                elevation={10}
-                sx={{
-                  p: 5,
-                  borderRadius: 4,
-                  bgcolor: "rgba(31,47,90,0.7)",
-                  backdropFilter: "blur(15px)",
-                  color: "#e0e7ff",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
-              >
-                <form onSubmit={handleSubmit}>
-                  <Stack spacing={3}>
-                    <TextField
-                      fullWidth
-                      variant="filled"
-                      label="Full Name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      InputProps={{ sx: { bgcolor: "#15223f", color: "#fff" } }}
-                      required
-                    />
+        <div className="contact-grid">
+          <Reveal as="form" className="card form" onSubmit={onSubmit}>
+            <label>Full name
+              <input name="name" type="text" autoComplete="name" required />
+            </label>
+            <label>Email address
+              <input name="email" type="email" autoComplete="email" required />
+            </label>
+            <label>Message
+              <textarea name="message" rows="5" required />
+            </label>
+            <input className="hp" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true" />
+            <button className="btn btn--primary btn--lg" type="submit" disabled={state === 'sending'}>
+              <Send size={18} aria-hidden /> {state === 'sending' ? 'Sending…' : 'Send message'}
+            </button>
+            <p className="form__status" role="status" aria-live="polite">
+              {state === 'sent' && (ENDPOINT ? 'Thank you! Your message has been sent.' : 'Your email app should now open with your message ready to send.')}
+              {state === 'error' && `Sorry, that didn’t go through. Please email ${SITE.email} directly.`}
+            </p>
+          </Reveal>
 
-                    <TextField
-                      fullWidth
-                      variant="filled"
-                      label="Email Address"
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      InputProps={{ sx: { bgcolor: "#15223f", color: "#fff" } }}
-                      required
-                    />
-
-                    <TextField
-                      fullWidth
-                      variant="filled"
-                      label="Message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      multiline
-                      rows={5}
-                      InputProps={{ sx: { bgcolor: "#15223f", color: "#fff" } }}
-                      required
-                    />
-
-                    <motion.div whileHover={{ scale: 1.03 }}>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        sx={{
-                          bgcolor: "#4F9DFF",
-                          "&:hover": { bgcolor: "#2563EB" },
-                          borderRadius: 3,
-                          py: 1.5,
-                          fontWeight: 600,
-                        }}
-                        fullWidth
-                      >
-                        Send Message
-                      </Button>
-                    </motion.div>
-                  </Stack>
-                </form>
-
-                <AnimatePresence>
-                  {submitted && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      style={{
-                        marginTop: 16,
-                        color: "#4F9DFF",
-                        fontWeight: 600,
-                      }}
-                    >
-                      🎉 Thank you! Your message has been sent.
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </Paper>
-            </motion.div>
-          </Grid>
-
-          {/* CONTACT INFO */}
-          <Grid item xs={12} md={6}>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <Paper
-                elevation={10}
-                sx={{
-                  p: 5,
-                  borderRadius: 4,
-                  bgcolor: "rgba(31,47,90,0.7)",
-                  backdropFilter: "blur(15px)",
-                  color: "#e0e7ff",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
-              >
-                <Typography
-                  variant="h5"
-                  sx={{ fontWeight: 700, mb: 3, color: "#4F9DFF" }}
-                >
-                  Get in Touch
-                </Typography>
-
-                <Typography sx={{ mb: 3, color: "#cfd8ff" }}>
-                  We’d love to hear from you! Connect with us through our
-                  official platforms.
-                </Typography>
-
-                <Stack spacing={1.5}>
-                  <Typography>
-                    <strong>Email:</strong>{" "}
-                    <Link
-                      href="mailto:info@anchorfoundation.org"
-                      sx={{ color: "#4F9DFF" }}
-                    >
-                      info@anchorfoundation.org
-                    </Link>
-                  </Typography>
-
-                  <Typography>
-                    <strong>Phone:</strong>{" "}
-                    <Link
-                      href="tel:+254741973192"
-                      sx={{ color: "#4F9DFF" }}
-                    >
-                      +254 741 973 192
-                    </Link>
-                  </Typography>
-
-                  <Typography>
-                    <strong>Address:</strong> Nairobi, Kenya
-                  </Typography>
-                </Stack>
-
-                <Divider sx={{ my: 4, borderColor: "rgba(255,255,255,0.1)" }} />
-
-                {/* SOCIAL MEDIA */}
-                <Typography
-                  variant="h6"
-                  sx={{ mb: 3, color: "#4F9DFF", fontWeight: 600 }}
-                >
-                  Follow Us
-                </Typography>
-
-                <Stack direction="row" spacing={2}>
-                  {socialLinks.map((social, index) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.2, rotate: 5 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <IconButton
-                        href={social.url}
-                        target="_blank"
-                        sx={{
-                          bgcolor: "rgba(255,255,255,0.08)",
-                          color: social.color,
-                          "&:hover": {
-                            bgcolor: social.color,
-                            color: "#fff",
-                          },
-                        }}
-                      >
-                        {social.icon}
-                      </IconButton>
-                    </motion.div>
-                  ))}
-                </Stack>
-              </Paper>
-            </motion.div>
-          </Grid>
-        </Grid>
-      </Box>
-    </Box>
-  );
+          <Reveal className="card contact-info" delay={100}>
+            <h3>Reach us directly</h3>
+            <ul>
+              <li><Mail size={20} aria-hidden /><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+              <li><Phone size={20} aria-hidden /><a href={SITE.phoneHref}>{SITE.phone}</a></li>
+              <li><MapPin size={20} aria-hidden /><span>{SITE.address}</span></li>
+            </ul>
+            <a className="btn btn--whatsapp" href={SITE.whatsapp} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+            <h3>Follow us</h3>
+            <div className="socials">
+              {SOCIALS.map((s) => {
+                const Icon = SOCIAL_ICONS[s.key]
+                return (
+                  <a key={s.key} href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`Anchor Foundation on ${s.name}`}>
+                    <Icon size={22} aria-hidden />
+                  </a>
+                )
+              })}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
 }

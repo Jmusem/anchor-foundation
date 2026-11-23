@@ -1,123 +1,88 @@
-// eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
-import { MapPin, Clock } from "lucide-react";
-import { useState, useEffect } from "react";
-import "./Events.css";
+import { useEffect, useState } from 'react'
+import { EVENTS } from '../data'
+import { Calendar, Clock, MapPin } from './Icons'
+import Reveal from './Reveal'
 
-const events = [
-  {
-    date: "2026-04-24T21:00:00",
-    displayDate: "24 Apr 2026",
-    title: "Gathering of Anchors – Worship Night",
-    venue: "GPF Thiba",
-    time: "9:00 PM – 4:00 AM",
-  },
-  {
-    date: "2026-06-01T09:00:00",
-    displayDate: "1 Jun 2026",
-    title: "Environmental Day",
-    venue: "Community Outreach",
-    time: "All Day",
-  },
-  {
-    date: "2026-08-09T10:00:00",
-    displayDate: "9 Aug 2026",
-    title: "Children’s Home Outreach",
-    venue: "Nyeri Town",
-    time: "10:00 AM – 3:00 PM",
-  },
-  {
-    date: "2026-10-10T08:00:00",
-    displayDate: "10 Oct 2026",
-    title: "Anchor Ride Day",
-    venue: "Ngurubani",
-    time: "8:00 AM – 2:00 PM",
-  },
-  {
-    date: "2026-12-13T09:00:00",
-    displayDate: "13 Dec 2026",
-    title: "Anchor Thanksgiving Day",
-    venue: "UPC Church, Thiba",
-    time: "9:00 AM – 1:00 PM",
-  },
-];
+const pad = (n) => String(n).padStart(2, '0')
+
+function Countdown({ target }) {
+  const [now, setNow] = useState(null)
+  useEffect(() => {
+    setNow(Date.now())
+    const t = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(t)
+  }, [])
+  if (now === null) return <div className="countdown" aria-hidden />
+  const diff = Math.max(0, new Date(target).getTime() - now)
+  const parts = [
+    ['Days', Math.floor(diff / 864e5)],
+    ['Hours', Math.floor(diff / 36e5) % 24],
+    ['Minutes', Math.floor(diff / 6e4) % 60],
+    ['Seconds', Math.floor(diff / 1e3) % 60],
+  ]
+  return (
+    <div className="countdown" role="timer" aria-label="Time until the next event">
+      {parts.map(([label, v]) => (
+        <div key={label}><span>{label === 'Days' ? v : pad(v)}</span><small>{label}</small></div>
+      ))}
+    </div>
+  )
+}
 
 export default function Events() {
-  const [timeLeft, setTimeLeft] = useState({});
-  const nextEvent = events[0];
+  // `now` stays null on the server / first render so prerendered HTML matches the browser.
+  const [now, setNow] = useState(null)
+  useEffect(() => setNow(Date.now()), [])
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const difference = new Date(nextEvent.date) - new Date();
-
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((difference / 1000 / 60) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
-
-      setTimeLeft({ days, hours, minutes, seconds });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+  const status = (e) => {
+    if (now === null) return 'upcoming'
+    if (new Date(e.end).getTime() < now) return 'past'
+    if (new Date(e.start).getTime() <= now) return 'live'
+    return 'upcoming'
+  }
+  const next = now === null ? null : EVENTS.find((e) => status(e) !== 'past')
 
   return (
-    <section className="events-section">
+    <section className="section" id="events">
       <div className="container">
+        <Reveal className="section__head">
+          <p className="eyebrow">Join us</p>
+          <h2>Calendar of events</h2>
+          <p className="lead">Be part of something impactful. Everyone is welcome.</p>
+        </Reveal>
 
-        {/* Header */}
-        <motion.div
-          className="events-header text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="section-tag">Anchor Foundation</span>
-          <h2>2026 Calendar of Events</h2>
-          <p>Join us and be part of something impactful.</p>
-        </motion.div>
+        {next && (
+          <Reveal className="next-event">
+            <div>
+              <p className="eyebrow eyebrow--light">{status(next) === 'live' ? 'Happening now' : 'Next up'}</p>
+              <h3>{next.title}</h3>
+              <p className="next-event__meta">
+                <span><Calendar size={16} aria-hidden /> {next.displayDate}</span>
+                <span><MapPin size={16} aria-hidden /> {next.venue}</span>
+                <span><Clock size={16} aria-hidden /> {next.time}</span>
+              </p>
+            </div>
+            {status(next) === 'upcoming' && <Countdown target={next.start} />}
+          </Reveal>
+        )}
 
-        {/* Countdown */}
-        <div className="countdown-box">
-          <h4>Next Event Starts In:</h4>
-          <div className="countdown-grid">
-            <div><span>{timeLeft.days}</span><small>Days</small></div>
-            <div><span>{timeLeft.hours}</span><small>Hours</small></div>
-            <div><span>{timeLeft.minutes}</span><small>Minutes</small></div>
-            <div><span>{timeLeft.seconds}</span><small>Seconds</small></div>
-          </div>
-        </div>
-
-        {/* Timeline */}
-        <div className="timeline">
-          {events.map((event, index) => (
-            <motion.div
-              key={index}
-              className="timeline-item"
-              initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="timeline-content">
-                <span className="event-date">{event.displayDate}</span>
-                <h3>{event.title}</h3>
-
-                <div className="event-meta">
-                  <div><MapPin size={16}/> {event.venue}</div>
-                  <div><Clock size={16}/> {event.time}</div>
+        <ol className="timeline">
+          {EVENTS.map((e, i) => {
+            const s = status(e)
+            return (
+              <Reveal as="li" className={`timeline__item is-${s}`} key={e.start} delay={(i % 3) * 60}>
+                <time className="timeline__date" dateTime={e.start}>{e.displayDate}</time>
+                <div className="timeline__body">
+                  <h3>{e.title}</h3>
+                  <p><MapPin size={15} aria-hidden /> {e.venue}</p>
+                  <p><Clock size={15} aria-hidden /> {e.time}</p>
                 </div>
-
-                {/* Clean Status Badge Instead of Register Button */}
-                <div className="event-status">
-                  Upcoming Event
-                </div>
-
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
+                <span className="badge">{s === 'past' ? 'Completed' : s === 'live' ? 'Happening now' : 'Upcoming'}</span>
+              </Reveal>
+            )
+          })}
+        </ol>
       </div>
     </section>
-  );
+  )
 }
