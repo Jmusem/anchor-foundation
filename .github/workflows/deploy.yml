@@ -36,38 +36,29 @@ jobs:
           SITE_URL: ${{ vars.SITE_URL || 'https://anchorfoundation.co.ke' }}
           VITE_FORM_ENDPOINT: ${{ vars.FORM_ENDPOINT }}
 
-      - name: Package
-        run: |
-          [ -n "$CPANEL_TOKEN" ] || { echo "::error::Secret CPANEL_TOKEN is missing (see DEPLOY.md)"; exit 1; }
-          (cd dist && zip -qr ../site.zip .)
-          ls -lh site.zip
-
       - name: Upload to cPanel
         run: |
+          [ -n "$CPANEL_TOKEN" ] || { echo "::error::Secret CPANEL_TOKEN is missing (see DEPLOY.md)"; exit 1; }
           API="https://$CPANEL_HOST:2083"
           AUTH="Authorization: cpanel $CPANEL_USER:$CPANEL_TOKEN"
-          check() { echo "$1"; echo "$1" | grep -q '"status":1' || { echo "::error::cPanel API call failed"; exit 1; }; }
-
-          echo "Uploading..."
-          check "$(curl -sS --fail-with-body -m 300 -H "$AUTH" \
-            -F "dir=$WEB_DIR" -F "file-1=@site.zip;filename=_deploy.zip" \
-            "$API/execute/Fileman/upload_files")"
-
-          echo "Extracting over the live site..."
-          R=$(curl -sS --fail-with-body -m 300 -H "$AUTH" -G "$API/json-api/cpanel" \
-            --data-urlencode "cpanel_jsonapi_user=$CPANEL_USER" \
-            --data-urlencode "cpanel_jsonapi_apiversion=2" \
-            --data-urlencode "cpanel_jsonapi_module=Fileman" \
-            --data-urlencode "cpanel_jsonapi_func=fileop" \
-            --data-urlencode "op=extract" \
-            --data-urlencode "sourcefiles=$WEB_DIR/_deploy.zip" \
-            --data-urlencode "destfiles=$WEB_DIR")
-          echo "$R"
-          echo "$R" | grep -q '"result":"1"' || { echo "::error::Extract failed"; exit 1; }
-
-          echo "Cleaning up..."
-          curl -sS -m 60 -H "$AUTH" -G "$API/execute/Fileman/delete_files" \
-            --data-urlencode "files=$WEB_DIR/_deploy.zip" >/dev/null || true
+          cd dist
+          fail=0
+          # one request per folder: create it if needed, then upload every file in it (overwriting)
+          while IFS= read -r d; do
+            rel="${d#./}"; [ "$d" = "." ] && rel=""
+            target="$WEB_DIR${rel:+/$rel}"
+            if [ -n "$rel" ]; then
+              curl -sS -m 60 -H "$AUTH" -G "$API/json-api/cpanel"                 --data-urlencode "cpanel_jsonapi_user=$CPANEL_USER" --data-urlencode "cpanel_jsonapi_apiversion=2"                 --data-urlencode "cpanel_jsonapi_module=Fileman" --data-urlencode "cpanel_jsonapi_func=mkdir"                 --data-urlencode "path=$(dirname "$target")" --data-urlencode "name=$(basename "$target")" >/dev/null || true
+            fi
+            args=(); n=0
+            while IFS= read -r -d '' file; do n=$((n+1)); args+=(-F "file-$n=@$file;filename=$(basename "$file")"); done               < <(find "$d" -maxdepth 1 -type f -print0)
+            [ $n -eq 0 ] && continue
+            echo "Uploading $n file(s) to $target"
+            R=$(curl -sS -m 600 -H "$AUTH" -F "dir=$target" -F "overwrite=1" "${args[@]}" "$API/execute/Fileman/upload_files")
+            echo "$R" | head -c 600; echo
+            echo "$R" | grep -q '"status":1' || { echo "::error::Upload failed for $target"; fail=1; }
+          done < <(find . -type d)
+          exit $fail
 
       - name: Check site is live
         run: |
